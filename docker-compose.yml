@@ -1,0 +1,38 @@
+version: "3"
+
+services:
+
+  server:
+    build: 
+      context: .
+      dockerfile: Dockerfile-app
+    entrypoint: "python server.py"
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db
+      - queue
+      - worker
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile-app
+    entrypoint: "python worker.py"
+    environment:
+      PYTHONUNBUFFERED: 1
+    depends_on:
+      - queue
+      - db
+
+  db:
+    build:
+      context: .
+      dockerfile: Dockerfile-postgres
+    restart: always
+
+  queue:
+    image: rabbitmq
+    restart: always
+
+    

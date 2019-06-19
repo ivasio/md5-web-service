@@ -1,0 +1,5 @@
+FROM postgres:alpine
+
+RUN mkdir -p /docker-entrypoint-initdb.d
+COPY service/db_init.sql /docker-entrypoint-initdb.d
+ENV POSTGRES_PASSWORD pass
